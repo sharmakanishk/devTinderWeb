@@ -4,9 +4,9 @@ import NavBar from "./NavBar";
 import Footer from "./Footer";
 import Feed from "./Feed";
 import { useDispatch } from "react-redux";
-import { addUser } from "./utils/userSlice";
+import { addUser } from "../utils/userSlice";
 import axios from "axios";
-import { BASE_URL } from "./constants/const";
+import { BASE_URL } from "../constants/const";
 import Toast from "./Toast";
 
 const Body = ()=>{

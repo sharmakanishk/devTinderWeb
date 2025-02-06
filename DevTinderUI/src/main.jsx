@@ -1,12 +1,12 @@
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import './index.css'
-import Body from './Body'
+import Body from './components/Body'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
-import Login from './Login'
+import Login from './components/Login'
 import { Provider } from 'react-redux'
 import { store } from './utils/store'
-import Feed from './Feed'
+import Feed from './components/Feed'
 
 
 createRoot(document.getElementById('root')).render(
