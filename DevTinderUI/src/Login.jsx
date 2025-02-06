@@ -3,18 +3,25 @@ import axios from 'axios'
 import { useDispatch } from 'react-redux'
 import { addUser } from './utils/userSlice'
 import { Link, useNavigate } from 'react-router-dom'
+import { BASE_URL } from './constants/const'
 
 const Login = () => {
     const [email, setEmail]= useState("virat@gmail.com")
     const [password, setPassword]= useState("Virat@123")
+    const [wrongCred, setWrongCred] = useState(null)
     const dispatch = useDispatch()
     const navigate = useNavigate()
     async function handleClick(){
-        const res = await axios.post
-        ("http://localhost:7777/login", {email, password}, { withCredentials: true });
-        console.log(res.data)
-        dispatch(addUser(res.data))
-        navigate("/")
+        try{
+            const res = await axios.post
+            (BASE_URL+"/login", {email, password}, { withCredentials: true });
+            console.log(res)
+            dispatch(addUser(res.data))
+            navigate("/")
+        }catch(err){
+            setWrongCred(err.response.data)
+            console.log(err.message)
+        }      
     }
 
   return (
@@ -28,6 +35,7 @@ const Login = () => {
             <label className="fieldset-label">Password</label>
             <input type="password" className="input" placeholder="Password" value={password} onChange={(e)=>setPassword(e.target.value)} />
             <div><a className="link link-hover">Forgot password?</a></div>
+            <div><p className='text-red-500'>{wrongCred}</p></div>
             <button className="btn btn-neutral mt-4" onClick={handleClick}>Login</button>
           </fieldset>
         </div>
