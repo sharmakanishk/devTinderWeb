@@ -47,7 +47,7 @@ const Body = ()=>{
             <Outlet/>
             <Footer/>
         </div>
-        {toast && <Toast error={errorMessage}/>}
+        {toast && <Toast message={errorMessage}/>}
         </>
     )
 }

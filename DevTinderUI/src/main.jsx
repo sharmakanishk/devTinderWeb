@@ -7,7 +7,7 @@ import Login from './components/Login'
 import { Provider } from 'react-redux'
 import { store } from './utils/store'
 import Feed from './components/Feed'
-
+import Profile from './components/Profile'
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
@@ -17,6 +17,7 @@ createRoot(document.getElementById('root')).render(
             <Route path='/' element={<Body/>}>
               <Route index element={<Feed/>} />
               <Route path="/login" element={<Login/>} />
+              <Route path="/profile" element={<Profile/>}/>
               {/* <Route index element={<Signup/>} />
               <Route index element={<Profile/>} /> */}
             </Route>
