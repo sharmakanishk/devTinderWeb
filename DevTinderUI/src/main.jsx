@@ -8,6 +8,8 @@ import { Provider } from 'react-redux'
 import { store } from './utils/store'
 import Feed from './components/Feed'
 import Profile from './components/Profile'
+import Connection from './components/Connection'
+import Request from './components/Request'
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
@@ -18,8 +20,8 @@ createRoot(document.getElementById('root')).render(
               <Route index element={<Feed/>} />
               <Route path="/login" element={<Login/>} />
               <Route path="/profile" element={<Profile/>}/>
-              {/* <Route index element={<Signup/>} />
-              <Route index element={<Profile/>} /> */}
+              <Route path="/connection" element={<Connection/>}/>
+              <Route path="/requests" element={<Request/>}/>
             </Route>
           </Routes>
       </BrowserRouter>
