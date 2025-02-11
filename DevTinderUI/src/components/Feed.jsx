@@ -10,7 +10,6 @@ const Feed = () => {
   const feed = useSelector(store => store.feed)
   const fetchFeed = async ()=>{
     const res = await axios.get(BASE_URL+"/feed",{withCredentials:true})
-    console.log(res.data)
     dispatch(addFeed(res.data))
   }
   useEffect(()=>{

@@ -7,16 +7,21 @@ import ConnectionCard from './ConnectionCard'
 
 const Connection = () => {
     const connection = useSelector(store=> store.connection)
-    console.log(connection)
     const dispatch = useDispatch()
     const getConnections=async ()=>{
+      try{
         const res = await axios.get(BASE_URL+"/user/connection",{withCredentials:true})
         dispatch(addConnection(res.data.data))
+      }catch(err){
+        console.log(err.response.data)
+      }
     }
     useEffect(()=>{
         getConnections()
     },[])
-
+    if(!connection || connection.length===0){
+      return (<h1>There are no connections yet</h1>)
+    }
   return (
     <div className='items-center justify-center'>
         <div className='my-2 flex justify-center'><h2 className='text-white'>Connections</h2></div> 
