@@ -9,16 +9,22 @@ const Feed = () => {
   const dispatch = useDispatch()
   const feed = useSelector(store => store.feed)
   const fetchFeed = async ()=>{
-    // if(feed)return
     const res = await axios.get(BASE_URL+"/feed",{withCredentials:true})
+    console.log(res.data)
     dispatch(addFeed(res.data))
   }
   useEffect(()=>{
     fetchFeed()
   },[])
+  if(!feed || feed.length ===0){
+    return (<h1 className='flex justify-center my-3 '>No more users left</h1>)
+  }
   return (
     <>
-    {feed && <Card data={feed.Users[0]}/>}
+    
+    {feed && feed.map((user)=>{
+      return <Card key={user._id} data={user}/>
+    })}
     </>
   )
 }

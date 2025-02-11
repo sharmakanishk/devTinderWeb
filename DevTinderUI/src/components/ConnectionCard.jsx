@@ -8,7 +8,8 @@ const ConnectionCard = ({userInfo}) => {
             <figure>
                 <img
                 src={profilepic}
-                alt="Profile Pic" />
+                alt="Profile Pic"
+                className="w-16 h-16 object-cover rounded-full" />
             </figure>
             <div className="card-body">
                 <h2 className="card-title">{firstname + " " + lastname}</h2>
