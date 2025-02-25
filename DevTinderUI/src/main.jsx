@@ -10,9 +10,10 @@ import Feed from './components/Feed'
 import Profile from './components/Profile'
 import Connection from './components/Connection'
 import Request from './components/Request'
+import Chat from './components/Chat'
 
 createRoot(document.getElementById('root')).render(
-  <StrictMode>
+    <StrictMode>
     <Provider store={store}>
       <BrowserRouter>
           <Routes>
@@ -22,10 +23,11 @@ createRoot(document.getElementById('root')).render(
               <Route path="/profile" element={<Profile/>}/>
               <Route path="/connection" element={<Connection/>}/>
               <Route path="/requests" element={<Request/>}/>
+              <Route path="/chat/:toUserId" element={<Chat/>}/>
             </Route>
           </Routes>
       </BrowserRouter>
     </Provider>
-  </StrictMode>,
+    </StrictMode>
 )
 
