@@ -6,11 +6,19 @@ const initializeSocket = ()=>{
         .split("; ")
         .find(row => row.startsWith("token="))
         ?.split("=")[1];
-    return  io(BASE_URL,{
-        auth:{
-            token,
+        if(location.hostname === "localhost"){
+            return  io(BASE_URL,{
+                auth:{
+                    token,
+                }
+            });
         }
-    });
+        else{
+            return io("/", {
+                path:"/api/socket.io",
+                auth:{token}
+            })
+        }
 }
 
 export default initializeSocket
