@@ -146,6 +146,7 @@ import axios from "axios";
 import { BASE_URL } from "../constants/const";
 
 const Chat = () => {
+    const [fetchOlderMessage, setFetchOlderMessage]=useState(false)
     const [messages, setMessages] = useState([]); // Renamed from "message" to "messages"
     const [text, setText] = useState("");
     const { toUserId } = useParams();
@@ -163,7 +164,7 @@ const Chat = () => {
             const chat = await axios.get(`${BASE_URL}/chat/${toUserId}/messages?page=${page}`, { withCredentials: true });
 
             if (chat.data.length > 0) {
-                const formattedMessages = chat.data.map(({ userId, text }) => ({ id: userId, text }));
+                const formattedMessages = chat.data.map(({_id, userId, text }) => ({textId:_id, id: userId, text }));
                 
                 setMessages((prev) => [...prev, ...formattedMessages ]); // ✅ Add older messages at the top
                 setPage((prev) => prev + 1);
@@ -185,9 +186,8 @@ const Chat = () => {
 
         socket.emit("joinChat", { toUserId, firstname, id });
 
-        socket.on("receivedMessage", ({ id, text }) => {
-            console.log("New message received:", text);
-            setMessages((prevMessages) => [{ id, text }, ...prevMessages ]); // ✅ Append new messages at the bottom
+        socket.on("receivedMessage", ({textId ,id, text }) => {
+            setMessages((prevMessages) => [{ textId, id, text }, ...prevMessages ]); // ✅ Append new messages at the bottom
         });
 
         return () => {
@@ -197,19 +197,28 @@ const Chat = () => {
     }, [toUserId, id, firstname]);
 
     useEffect(() => {
-        if (chatContainerRef.current) {
+        if (chatContainerRef.current && fetchOlderMessage===false) {
             messagesEndRef.current?.scrollIntoView({ behavior: "smooth", block: "nearest" });
         }
     }, [messages]);
 
-    const handleScroll = () => {
+    const handleScroll = async () => {
         if (!chatContainerRef.current) return;
 
         const chatContainer = chatContainerRef.current;
+        // ✅ Store scroll position before fetching older messages
+        const prevHeight = chatContainer.scrollHeight;
 
         if (chatContainer.scrollTop === 0) {
-            console.log("Fetching more messages...");
-            getChat();
+            const firstMessage = chatContainer.firstElementChild;
+            const firstElementId = firstMessage.getAttribute("data-id");
+            setFetchOlderMessage(true)
+            await getChat();
+            requestAnimationFrame(() => {
+                const newHeight = chatContainer.scrollHeight;
+                chatContainer.scrollTop = newHeight - prevHeight;
+            });
+            setFetchOlderMessage(false)
         }
     };
 
@@ -234,10 +243,12 @@ const Chat = () => {
             </div>
 
             <div className="flex-grow overflow-y-auto p-2 space-y-2"
-                onScroll={handleScroll} ref={chatContainerRef}>
+                
+                onScroll={handleScroll} 
+                ref={chatContainerRef}>
                 {messages.slice().reverse().map((textMsg, index) => (
                     <div key={index} className={(textMsg.id === id) ? "chat chat-end" : "chat chat-start"}>
-                        <div className="chat-bubble bg-zinc-800 px-3 py-2 text-sm">{textMsg.text}</div>
+                        <div className="chat-bubble bg-zinc-800 text-amber-50 px-3 py-2 text-sm" data-id={textMsg.textId}>{textMsg.text}</div>
                     </div>
                 ))}
                 <div ref={messagesEndRef} />

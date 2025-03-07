@@ -42,11 +42,13 @@ const Body = ()=>{
     },[])
     return (
         <>
-        <div>
-            <NavBar/>
-            <Outlet/>
-            <Footer/>
-        </div>
+          <div className="flex flex-col min-h-screen">
+                <NavBar />
+                <div className="flex-grow"> {/* This pushes the footer down */}
+                    <Outlet />
+                </div>
+                <Footer />
+            </div>
         {toast && <Toast message={errorMessage}/>}
         </>
     )
